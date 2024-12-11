@@ -1,10 +1,22 @@
 import React, { useState } from 'react'
-import { Link } from 'react-router-dom'
+import { Link, useNavigate } from 'react-router-dom'
 import { ClipboardList, Home, LogOutIcon, Menu, Users, X } from 'lucide-react'
+import { userLogoutAPI } from '../api/UserAPI';
+import toast from 'react-hot-toast';
 
 const NavBar = () => {
     const [menuOpen, setMenuOpen] = useState(false);
+    const navigate = useNavigate()
 
+    const handleLogout = async () => {
+        const response = await userLogoutAPI();
+        if(response.status === 200) {
+            toast.success(response.data.message)
+            navigate('/login')
+        } else {
+            toast.error("Logout failed. Please try again!")
+        }
+    }
     return (
         <>
             <nav className='bg-black/40 h-16 w-full p-3'>
@@ -45,10 +57,13 @@ const NavBar = () => {
                         </Link>
                     </div>
                     <div className='flex'>
-                        <Link to='/logout' className='flex items-center px-4 hover:text-gray-300 space-x-2'>
+                        <div 
+                            className='flex items-center px-4 hover:text-gray-300 space-x-2'
+                            onClick={handleLogout}
+                        >
                             <LogOutIcon />
                             <span className='hidden sm:inline-block'>Logout</span>
-                        </Link>
+                        </div>
                     </div>
                 </div>
             </nav>

@@ -22,7 +22,7 @@ const Login = () => {
             const response = await userLoginAPI(email, password);
             if(response.status === 200) {
                 navigate('/dashboard');
-                toast.success("response.data.message")
+                toast.success(response.data.message)
             } else {
                 toast.error("Login Failed. Please try again!")
             }
