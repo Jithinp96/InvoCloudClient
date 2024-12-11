@@ -1,11 +1,12 @@
 import React, { useState } from 'react'
+import toast from 'react-hot-toast'
+import axios from 'axios'
 import { LockKeyhole, LogIn, MailIcon } from 'lucide-react'
 
 import InputField from './ui/InputField'
 import Button from './ui/Button'
 import { userLoginAPI } from '../api/UserAPI'
 import { useNavigate } from 'react-router-dom'
-import toast from 'react-hot-toast'
 
 const Login = () => {
     const [email, setEmail] = useState('');
@@ -14,21 +15,23 @@ const Login = () => {
 
     const navigate = useNavigate()
 
-    const handleLogin = async() => {
+    const handleLogin = async(e) => {
         e.preventDefault();
-        console.log("Email: ", email);
-        console.log("Password: ", password);
         
         try {
-            const response = userLoginAPI(email, password);
-            if((await response).data.success) {
-                toast.success("Login Successful")
-                // navigate('/dashboard');
+            const response = await userLoginAPI(email, password);
+            if(response.status === 200) {
+                navigate('/dashboard');
+                toast.success("response.data.message")
             } else {
-                toast.error("Login Failed")
+                toast.error("Login Failed. Please try again!")
             }
         } catch (error) {
-            
+            if(axios.isAxiosError(error) && error.message) {
+                setErrorMessage(error.response.data.message)
+            } else {
+                setErrorMessage("Unexpected error occured. Please try again!")
+            }
         }
     }
 
