@@ -17,3 +17,12 @@ export const userLogoutAPI = async() => {
         throw error;
     }
 }
+
+export const fetchDashboardAPI = async() => {
+    try {
+        const response = await axiosInstance.get('/dashboard');
+        return response
+    } catch (error) {
+        throw error
+    }
+}
