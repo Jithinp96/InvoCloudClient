@@ -2,7 +2,7 @@ import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
 import { Pencil, Plus, Unlock } from 'lucide-react';
 
-import { addItemAPI, fetchItemsAPI, itemStatusAPI } from '../api/ItemAPI';
+import { addItemAPI, fetchItemsAPI, itemStatusAPI, updateItemAPI } from '../api/ItemAPI';
 import Table from './ui/Table';
 import Button from './ui/Button';
 import Modal from './ui/Modal';
@@ -12,11 +12,12 @@ import ConfirmationBox from './ui/ConfirmationBox';
 const Dashboard = () => {
     const [isModalOpen, setIsModalOpen] = useState(false);
     const [isConfirmationOpen, setIsConfirmationOpen] = useState(false);
+    const [editMode, setEditMode] = useState(false);
+    const [currentItemId, setCurrentItemId] = useState(null);
 
     const [items, setItems] = useState([]);
     const [error, setError] = ('');
     const [newItem, setNewItem] = useState({ name: '', description: '', quantity: '', price: '' });
-    const [itemToDelete, setItemToDelete] = useState(null);
 
     useEffect(() => {
         const fetchDashboard = async() => {
@@ -37,37 +38,55 @@ const Dashboard = () => {
         }));
     };
 
-    const handleAddItem = async() => {
-        if(!newItem.name || !newItem.description || !newItem.quantity || !newItem.price) {
-            toast.error('Please fill all the fields!');
-            return
-        }
-
-        try {
-            const response = await addItemAPI(newItem);
-
-            if(response.status === 201) {
-                setItems(prevItems => [...prevItems, response.data]);
-                
-                setIsModalOpen(false);
-
-                setNewItem({
-                    name: '',
-                    description: '',
-                    quantity: '',
-                    price: ''
-                });
-
-                toast.success('Item added successfully');
-            }
-        } catch (error) {
-            console.error('Error adding item:', error);
-            toast.error('Failed to add item');
-        }
-    }
-
     const handleEdit = (item) => {
-        setIsModalOpen(true)
+        setIsModalOpen(true);
+        setEditMode(true);
+        setCurrentItemId(item._id);
+        setNewItem({
+            name: item.name,
+            description: item.description,
+            quantity: item.quantity,
+            price: item.price,
+        })
+    };
+
+    const handleSaveItem = async () => {
+        if (!newItem.name || !newItem.description || !newItem.quantity || !newItem.price) {
+            toast.error('Please fill all the fields!');
+            return;
+        }
+    
+        try {
+            if (editMode) {
+                const response = await updateItemAPI(currentItemId, newItem);
+                if (response.status === 200) {
+                    setItems(prevItems =>
+                        prevItems.map(item =>
+                            item._id === currentItemId ? { ...item, ...newItem } : item
+                        )
+                    );
+                    toast.success('Item updated successfully');
+                }
+            } else {
+                const response = await addItemAPI(newItem);
+                if (response.status === 201) {
+                    setItems(prevItems => [...prevItems, response.data]);
+                    toast.success('Item added successfully');
+                }
+            }
+    
+            setIsModalOpen(false);
+            resetFormState();
+        } catch (error) {
+            console.error('Error saving item:', error);
+            toast.error(editMode ? 'Failed to update item' : 'Failed to add item');
+        }
+    };
+    
+    const resetFormState = () => {
+        setNewItem({ name: '', description: '', quantity: '', price: '' });
+        setEditMode(false);
+        setCurrentItemId(null);
     };
 
     const handleBlockUnblock = async (item) => {
@@ -75,7 +94,6 @@ const Dashboard = () => {
             const response = await itemStatusAPI(item._id);
             
             if (response.status === 200 && response.data.success) {
-                // Update the local state to reflect the new item status
                 setItems(prevItems => 
                     prevItems.map(existingItem => 
                         existingItem._id === item._id 
@@ -84,14 +102,11 @@ const Dashboard = () => {
                     )
                 );
     
-                // Show success toast
                 toast.success(response.data.message);
             } else {
-                // Handle unsuccessful response
                 toast.error("Failed to update item status. Please try again!");
             }
         } catch (error) {
-            // Handle any network or unexpected errors
             console.error('Error updating item status:', error);
             toast.error("An error occurred while updating item status");
         }
@@ -162,7 +177,7 @@ const Dashboard = () => {
                         variant='success'
                         onClick={() => setIsModalOpen(true)}
                     >
-                        Add Item
+                        title={editMode ? 'Edit Item' : 'Add New Item'}
                     </Button>
 
                     <Modal
@@ -208,15 +223,18 @@ const Dashboard = () => {
                         <div className="mt-4 flex justify-center space-x-2">
                             <Button 
                                 variant="danger" 
-                                onClick={() => setIsModalOpen(false)}
+                                onClick={() => {
+                                    setIsModalOpen(false);
+                                    resetFormState();
+                                }}
                             >
                                 Cancel
                             </Button>
                             <Button 
                                 variant="success"
-                                onClick={handleAddItem}
+                                onClick={handleSaveItem}
                             >
-                                Confirm
+                                {editMode ? 'Update' : 'Confirm'}
                             </Button>
                         </div>
                     </Modal>

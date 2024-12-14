@@ -21,7 +21,16 @@ export const fetchItemsAPI = async() => {
 export const itemStatusAPI = async(itemId) => {
     try {
         const response = axiosInstance.patch('/item/change-status', {itemId});
-        return response
+        return response;
+    } catch (error) {
+        throw error;
+    }
+}
+
+export const updateItemAPI = async(currentItemId, newItem) => {
+    try {
+        const response = axiosInstance.put('/item/update', newItem, {params: {currentItemId}})
+        return response;
     } catch (error) {
         throw error;
     }
