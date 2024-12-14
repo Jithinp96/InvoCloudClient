@@ -1,5 +1,10 @@
 body {
   background-color: #09193a;
+  background-image: url('../src/assets/layered-waves.svg');
+  background-position: bottom left;
+  background-repeat: no-repeat;
+  background-size: 100% auto;
+  background-attachment: fixed;
   font-family: sans-serif;
   color: aliceblue;
 }

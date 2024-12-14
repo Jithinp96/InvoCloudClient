@@ -1,6 +1,6 @@
 import React, { useState } from 'react'
 import { Link, useNavigate } from 'react-router-dom'
-import { ClipboardList, Home, LogOutIcon, Menu, Users, X } from 'lucide-react'
+import { BadgeIndianRupee, ClipboardList, Home, LogOutIcon, Menu, Users, X } from 'lucide-react'
 import { userLogoutAPI } from '../api/UserAPI';
 import toast from 'react-hot-toast';
 
@@ -43,15 +43,19 @@ const NavBar = () => {
                             menuOpen ? 'top-16 left-0 w-full p-4' : 'hidden md:flex'
                         }`}
                     >
-                        <Link to='#' className='flex items-center px-4 hover:text-gray-300 space-x-2'>
+                        <Link to='/dashboard' className='flex items-center px-4 hover:text-gray-300 space-x-2'>
                             <Home className='h-5 w-5' />
                             <span>Home</span>
                         </Link>
-                        <Link to='#' className='flex items-center px-4 hover:text-gray-300 space-x-2'>
+                        <Link to='/customers' className='flex items-center px-4 hover:text-gray-300 space-x-2'>
                             <Users className='h-5 w-5' />
                             <span>Customers</span>
                         </Link>
-                        <Link to='#' className='flex items-center px-4 hover:text-gray-300 space-x-2'>
+                        <Link to='/sales' className='flex items-center px-4 hover:text-gray-300 space-x-2'>
+                            <BadgeIndianRupee className='h-5 w-5' />
+                            <span>Sales</span>
+                        </Link>
+                        <Link to='/reports' className='flex items-center px-4 hover:text-gray-300 space-x-2'>
                             <ClipboardList className='h-5 w-5' />
                             <span>Report</span>
                         </Link>

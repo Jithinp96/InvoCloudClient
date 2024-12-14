@@ -37,14 +37,6 @@ const Login = () => {
 
     return (
         <div className='relative min-h-screen flex items-center justify-center overflow-hidden'>
-            <div className='absolute inset-0 z-0'>
-                <img 
-                    src='../src/assets/layered-waves.svg'
-                    alt='waves'
-                    className='absolute bottom-0 left-0 w-full'
-                />
-            </div>
-            
             <div className='relative z-10 w-auto px-4 sm:px-6 lg:px-8'>
                 <div className='max-w-md mx-auto lg:max-w-xl'>
                     <div className='bg-gradient-to-r from-white/30 to-white/10 backdrop-blur-md rounded-xl shadow-lg overflow-hidden'>
