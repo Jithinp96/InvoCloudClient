@@ -9,6 +9,7 @@ import Modal from './ui/Modal';
 import InputField from './ui/InputField';
 import Table from './ui/Table';
 import ConfirmationBox from './ui/ConfirmationBox';
+import { customerStatusAPI } from '../api/CustomerAPI';
 
 
 const Customer = () => {
@@ -131,6 +132,29 @@ const Customer = () => {
         setCurrentCustomerId(null);
     };
 
+    const handleBlockUnblock = async (customer) => {
+        try {
+            const response = await customerStatusAPI(customer._id);
+            
+            if (response.status === 200 && response.data.success) {
+                setCustomers(prevItems => 
+                    prevItems.map(existingCustomer => 
+                        existingCustomer._id === customer._id 
+                            ? { ...existingCustomer, isActive: response.data.data.isActive }
+                            : existingCustomer
+                    )
+                );
+    
+                toast.success(response.data.message);
+            } else {
+                toast.error("Failed to update customer status. Please try again!");
+            }
+        } catch (error) {
+            console.error('Error updating customer status:', error);
+            toast.error("An error occurred while updating customer status");
+        }
+    };
+
     const columns = [
         {
             key: 'name', 
@@ -141,7 +165,7 @@ const Customer = () => {
         {
             key: 'mobile', 
             header: 'Mobile',
-            width: '15%'
+            width: '10%'
         },
         {
             key: 'address', 
@@ -163,6 +187,21 @@ const Customer = () => {
                 >
                     <Pencil size={15} />
                 </button>
+            )
+        },
+        {
+            key: 'status',
+            header: 'Status',
+            width: '8%',
+            render: (value, row) => (
+                <Button 
+                    onClick={() => handleBlockUnblock(row)}
+                    variant={row.isActive ? 'success' : 'danger'}
+                    size="sm"
+                    title={row.isActive ? 'Block' : 'Unblock'}
+                >
+                    {row.isActive ? 'Active' : 'Blocked'}
+                </Button>
             )
         }
     ];
