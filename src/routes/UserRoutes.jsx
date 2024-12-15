@@ -4,6 +4,8 @@ import { Route, Routes } from 'react-router-dom'
 import LoginPage from '../pages/LoginPage'
 import DashboardPage from '../pages/DashboardPage'
 import CustomerPage from '../pages/CustomerPage'
+import SalesPage from '../pages/SalesPage'
+import ReportPage from '../pages/ReportPage'
 
 const UserRoutes = () => {
     return (
@@ -13,6 +15,8 @@ const UserRoutes = () => {
             
             <Route path='/dashboard' element={ <DashboardPage /> } />
             <Route path='/customers' element={ <CustomerPage /> } />
+            <Route path='/sales' element={ <SalesPage /> } />
+            <Route path='/reports' element={ <ReportPage /> } />
         </Routes>
     )
 }

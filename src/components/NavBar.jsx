@@ -53,7 +53,7 @@ const NavBar = () => {
                         </Link>
                         <Link to='/sales' className='flex items-center px-4 hover:text-gray-300 space-x-2'>
                             <BadgeIndianRupee className='h-5 w-5' />
-                            <span>Sales</span>
+                            <span>Record Sales</span>
                         </Link>
                         <Link to='/reports' className='flex items-center px-4 hover:text-gray-300 space-x-2'>
                             <ClipboardList className='h-5 w-5' />
