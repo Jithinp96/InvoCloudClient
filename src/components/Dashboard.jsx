@@ -1,6 +1,6 @@
 import React, { useEffect, useState } from 'react';
 import toast from 'react-hot-toast';
-import { Pencil, Plus, Unlock } from 'lucide-react';
+import { Pencil, Plus } from 'lucide-react';
 
 import { addItemAPI, fetchItemsAPI, itemStatusAPI, updateItemAPI } from '../api/ItemAPI';
 import Table from './ui/Table';
@@ -69,8 +69,10 @@ const Dashboard = () => {
                 }
             } else {
                 const response = await addItemAPI(newItem);
+                console.log("response.data: ", response.data);
+                
                 if (response.status === 201) {
-                    setItems(prevItems => [...prevItems, response.data]);
+                    setItems(prevItems => [...prevItems, response.data.item]);
                     toast.success('Item added successfully');
                 }
             }
@@ -177,13 +179,13 @@ const Dashboard = () => {
                         variant='success'
                         onClick={() => setIsModalOpen(true)}
                     >
-                        title={editMode ? 'Edit Item' : 'Add New Item'}
+                        Add New Item
                     </Button>
 
                     <Modal
                         isOpen={isModalOpen}
                         onClose={() => setIsModalOpen(false)}
-                        title="Add New Item"
+                        title={editMode ? 'Edit Item' : 'Add New Item'}
                         size='md'
                     >
                         <p className='text-black font-semibold py-2'>Name</p>
@@ -191,7 +193,6 @@ const Dashboard = () => {
                             name='name'
                             value={newItem.name}
                             onChange={handleInputChange}
-                            className='text-red' 
                         />
 
                         <p className='text-black font-semibold py-2'>Description</p>
@@ -208,7 +209,6 @@ const Dashboard = () => {
                             value={newItem.quantity}
                             onChange={handleInputChange}
                             type='number'
-                            className='text-red' 
                         />
 
                         <p className='text-black font-semibold py-2'>Price</p>
@@ -217,7 +217,6 @@ const Dashboard = () => {
                             value={newItem.price}
                             onChange={handleInputChange}
                             type='number'
-                            className='text-red' 
                         />
 
                         <div className="mt-4 flex justify-center space-x-2">
