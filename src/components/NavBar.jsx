@@ -33,7 +33,7 @@ const NavBar = () => {
 
                     <div className='p-2'>
                         <img 
-                            src='../src/assets/logo.svg' 
+                            src='/logo.svg' 
                             className='w-36'
                         />
                     </div>

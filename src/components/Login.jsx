@@ -43,7 +43,7 @@ const Login = () => {
                         <form onSubmit={handleLogin} className='p-6 sm:p-10 space-y-6'>
                             <div className='flex justify-center'>
                                 <img 
-                                    src='../src/assets/logo.svg'
+                                    src='/logo.svg'
                                     alt='invocloud'
                                     className='w-40'
                                 />
