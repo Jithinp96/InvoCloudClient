@@ -28,7 +28,7 @@ export const fetchCustomerLedgerAPI = async(customerId) => {
     }
 }
 
-export const sendReportEmail = async(reportData) => {
+export const sendReportEmail = async(activeReport, reportData) => {
     try {
         const response = await axiosInstance.post('/reports/email', {activeReport, reportData});
         return response;

@@ -17,18 +17,38 @@ const Dashboard = () => {
 
     const [items, setItems] = useState([]);
     const [error, setError] = ('');
+    const [searchQuery, setSearchQuery] = useState('');
     const [newItem, setNewItem] = useState({ name: '', description: '', quantity: '', price: '' });
 
     useEffect(() => {
-        const fetchDashboard = async() => {
-            const response = await fetchItemsAPI();
-            
-            if(response.status === 200) {
-                setItems(response.data.items)
+        const fetchDashboard = async () => {
+            try {
+                const response = await fetchItemsAPI(searchQuery);
+                if (response.status === 200) {
+                    setItems(response.data.items);
+                }
+            } catch (error) {
+                console.error('Error fetching items:', error);
+                toast.error('Failed to fetch items');
             }
+        };
+        fetchDashboard();
+    }, [searchQuery]);
+
+    const handleSearch = async (e) => {
+        const query = e.target.value;
+        setSearchQuery(query);
+    
+        try {
+            const response = await fetchItemsAPI(query);
+            if (response.status === 200) {
+                setItems(response.data.items);
+            }
+        } catch (error) {
+            console.error('Error fetching search results:', error);
+            toast.error('Failed to fetch items');
         }
-        fetchDashboard()
-    }, []);
+    };
 
     const handleInputChange = (e) => {
         const { name, value } = e.target;
@@ -172,6 +192,14 @@ const Dashboard = () => {
         <>
             <div className='p-5'>
                 <div className='pb-5 flex justify-end'>
+                    <input
+                        type="text"
+                        placeholder="Search items by name..."
+                        value={searchQuery}
+                        onChange={handleSearch}
+                        className="w-full text-black max-w-md px-2 py-2 border rounded-lg focus:outline-none focus:ring-2 focus:ring-blue-200 transition"
+                    />
+
                     <Button 
                         type='submit' 
                         icon={Plus}

@@ -9,14 +9,16 @@ export const addItemAPI = async(itemData) => {
     }
 }
 
-export const fetchItemsAPI = async() => {
+export const fetchItemsAPI = async (name = '') => {
     try {
-        const response = await axiosInstance.get('/items');
+        const response = await axiosInstance.get(`/items`, {
+            params: { name }, // Send the query as a parameter
+        });
         return response;
     } catch (error) {
         throw error;
     }
-}
+};
 
 export const itemStatusAPI = async(itemId) => {
     try {

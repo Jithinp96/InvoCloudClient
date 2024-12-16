@@ -137,6 +137,7 @@ const Report = () => {
         newWindow.print();
     };
 
+    // 4. Send Report via Email
     const handleEmailReport = async () => {
         if (!reportData.length) {
             toast.error('No data to email');
