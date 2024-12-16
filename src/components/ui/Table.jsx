@@ -1,12 +1,13 @@
 import React from 'react';
 
 const Table = ({ 
+  id,
   data, 
   columns 
 }) => {
   return (
     <div className="w-full overflow-x-auto">
-      <table className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
+      <table id={id} className="min-w-full bg-white shadow-md rounded-lg overflow-hidden">
         <thead className="bg-gray-100 border-b">
           <tr>
             {columns.map((column) => (

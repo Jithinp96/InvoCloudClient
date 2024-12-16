@@ -1,28 +1,38 @@
 import axiosInstance from "./AxiosInstance"
 
-export const fetchSalesReportAPI = async(filters) => {
+export const fetchSalesReportAPI = async() => {
     try {
-        const response = await axiosInstance.get('/reports/sales', { params: filters });
-        return response
+        const response = await axiosInstance.get('/reports/sales');
+        return response;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
-export const fetchItemsReportAPI = async(filters) => {
+export const fetchItemsReportAPI = async() => {
     try {
-        const response = await axiosInstance.get('/reports/items', { params: filters });
-        return response
+        const response = await axiosInstance.get('/reports/items');
+        return response;
     } catch (error) {
-        throw error
+        throw error;
     }
 }
 
-export const fetchCustomerLedgerAPI = async(filters) => {
+export const fetchCustomerLedgerAPI = async(customerId) => {
     try {
-        const response = await axiosInstance.get('/reports/customer-ledger', { params: filters });
-        return response
+        console.log("Heree: ", customerId);
+        const response = await axiosInstance.get(`/reports/customer-ledger/${customerId}`);
+        return response;
     } catch (error) {
-        throw error
+        throw error;
+    }
+}
+
+export const sendReportEmail = async(reportData) => {
+    try {
+        const response = await axiosInstance.post('/reports/email', {activeReport, reportData});
+        return response;
+    } catch (error) {
+        throw error;
     }
 }
